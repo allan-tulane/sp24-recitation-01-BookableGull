@@ -33,7 +33,16 @@ def _binary_search(mylist, key, left, right):
 	  index of key in mylist, or -1 if not present.
 	"""
 	### TODO
-
+	if len(mylist) == 1 and key != mylist[0]:
+		return -1
+	if len(mylist) == 1:
+		return key - 1
+	if key == mylist[len(mylist) // 2]:
+		return right
+	elif key < mylist[len(mylist) // 2]:
+		return _binary_search(mylist[:len(mylist) // 2], key, left, right)
+	elif key > mylist[len(mylist) // 2]:
+		return _binary_search(mylist[len(mylist) // 2:], key, left, right)
 	###
 
 
@@ -58,6 +67,11 @@ def time_search(search_fn, mylist, key):
 	  search function on this input.
 	"""
 	### TODO
+	start = time.time() * 1000
+	search_fn(mylist,key)
+	end = time.time() * 1000
+	finaltime = (start-end)
+	return finaltime
 
 	###
 
@@ -78,6 +92,23 @@ def compare_search(sizes=[1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7]):
 	"""
 	### TODO
 
+	newlist = []
+	finallist = []
+
+	for item in sizes:
+		newlist = list(range(int(item)))
+		x = time_search(linear_search, newlist, -1)
+		y = time_search(binary_search, newlist, -1)
+		finallist.append((item, x, y))
+	return finallist
+			
+
+	# lists = []
+	# for item in sizes:
+	# 	x = time_search(linear_search, item, -1)
+	# 	y = time_search(binary_search, item, -1)
+	# 	list.append((item, x, y))
+	# return lists
 	###
 
 def print_results(results):
@@ -86,4 +117,7 @@ def print_results(results):
 							headers=['n', 'linear', 'binary'],
 							floatfmt=".3f",
 							tablefmt="github"))
+	
 
+results = compare_search()
+print_results(results)
